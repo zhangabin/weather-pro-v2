@@ -1,0 +1,90 @@
+.marker-warning {
+  width: 40px;
+  height: 40px;
+  display: block;
+  position: relative;
+  border-radius: 50%;
+  #div1 {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    border-radius: 50%;
+    top:calc(50% - 20px);
+    left:calc(50% - 20px);
+    animation: warning 1s infinite ease-out ;
+    pointer-events: none;
+  }
+  #div2 {
+    display: block;
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top:calc(50% - 8px);
+    left:calc(50% - 8px);
+    border-radius: 50%;
+    background-color: #fff;
+    pointer-events: none;
+  }
+  #div3 {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    top:calc(50% - 5px);
+    left:calc(50% - 5px);
+    border-radius:50%;
+    pointer-events: none;
+  }
+}
+.marker-warning:hover {
+  #div2,#div3 {
+    transform: scale(1.2);
+  }
+}
+@keyframes warning{
+  0% {
+    transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    opacity: 0.0;
+  }
+  25% {
+    transform: scale(0.3);
+    -webkit-transform: scale(0.3);
+    opacity: 0.1;
+  }
+  50% {
+    transform: scale(0.5);
+    -webkit-transform: scale(0.5);
+    opacity: 0.3;
+  }
+  75% {
+    transform: scale(0.8);
+    -webkit-transform: scale(0.8);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    opacity: 0.0;
+  }
+}
+
+.marker {
+  display: flex;
+  height: 15px;
+  width: 15px;
+  position: relative;
+  border-radius: 50%;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  div {
+    position: absolute;
+    height: 8px;
+    width: 8px;
+    top:calc(50% - 4px);
+    left:calc(50% - 4px);
+    border-radius: 50%;
+    background-color: #3EFF88;
+  }
+}
+

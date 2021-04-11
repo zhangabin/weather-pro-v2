@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.weather.sysmanagement.forecast.mapper.TrendForecastMapper">
+    
+    <resultMap type="TrendForecast" id="TrendForecastResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="uploadUser"    column="upload_user"    />
+        <result property="uploadTime"    column="upload_time"    />
+        <result property="forecast24"    column="forecast_24"    />
+        <result property="forecast96"    column="forecast_96"    />
+        <result property="state"    column="state"    />
+        <result property="publishTime"    column="publish_time"    />
+    </resultMap>
+
+    <sql id="selectTrendForecastVo">
+        select id, title, upload_user, upload_time, forecast_24, forecast_96, state, publish_time from t_trend_forecast
+    </sql>
+
+    <select id="selectTrendForecastList" parameterType="TrendForecast" resultMap="TrendForecastResult">
+        <include refid="selectTrendForecastVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title like '%${title}%'</if>
+            <if test="uploadUser != null  and uploadUser != ''"> and upload_user like '%${uploadUser}%'</if>
+            <if test="params.beginUploadTime != null and params.beginUploadTime != '' and params.endUploadTime != null and params.endUploadTime != ''"> and upload_time &gt;= #{params.beginUploadTime} and upload_time &lt;= #{params.endUploadTime}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+        </where>
+    </select>
+    
+    <select id="selectTrendForecastById" parameterType="Long" resultMap="TrendForecastResult">
+        <include refid="selectTrendForecastVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTrendForecast" parameterType="TrendForecast">
+        insert into t_trend_forecast
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="uploadUser != null and uploadUser != ''">upload_user,</if>
+            <if test="uploadTime != null">upload_time,</if>
+            <if test="forecast24 != null and forecast24 != ''">forecast_24,</if>
+            <if test="forecast96 != null and forecast96 != ''">forecast_96,</if>
+            <if test="state != null and state != ''">state,</if>
+            <if test="publishTime != null">publish_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="uploadUser != null and uploadUser != ''">#{uploadUser},</if>
+            <if test="uploadTime != null">#{uploadTime},</if>
+            <if test="forecast24 != null and forecast24 != ''">#{forecast24},</if>
+            <if test="forecast96 != null and forecast96 != ''">#{forecast96},</if>
+            <if test="state != null and state != ''">#{state},</if>
+            <if test="publishTime != null">#{publishTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTrendForecast" parameterType="TrendForecast">
+        update t_trend_forecast
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="uploadUser != null and uploadUser != ''">upload_user = #{uploadUser},</if>
+            <if test="uploadTime != null">upload_time = #{uploadTime},</if>
+            <if test="forecast24 != null and forecast24 != ''">forecast_24 = #{forecast24},</if>
+            <if test="forecast96 != null and forecast96 != ''">forecast_96 = #{forecast96},</if>
+            <if test="state != null and state != ''">state = #{state},</if>
+            <if test="publishTime != null">publish_time = #{publishTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTrendForecastById" parameterType="Long">
+        delete from t_trend_forecast where id = #{id}
+    </delete>
+
+    <delete id="deleteTrendForecastByIds" parameterType="String">
+        delete from t_trend_forecast where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

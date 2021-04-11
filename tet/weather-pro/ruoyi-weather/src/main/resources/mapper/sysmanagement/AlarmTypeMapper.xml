@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.weather.sysmanagement.alarmtype.mapper.AlarmTypeMapper">
+
+    <resultMap type="com.ruoyi.weather.sysmanagement.alarmtype.domain.AlarmType" id="AlarmTypeResult">
+        <result property="id"    column="id"    />
+        <result property="alarmType"    column="alarm_type"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+    
+    <sql id="selectVo">
+        select id, alarm_type, state
+        from t_alarm_type
+    </sql>
+    <select id="selectList" parameterType="com.ruoyi.weather.sysmanagement.alarmtype.domain.AlarmType" resultMap="AlarmTypeResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="state != null and state != ''">
+                state = #{state}
+            </if>
+        </where>
+    </select>
+</mapper>

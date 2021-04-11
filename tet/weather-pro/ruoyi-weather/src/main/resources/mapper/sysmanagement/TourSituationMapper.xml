@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.weather.sysmanagement.tour.mapper.TourSituationMapper">
+    <resultMap type="com.ruoyi.weather.sysmanagement.tour.domain.TourSituation" id="TourSituationResult">
+        <result property="id"    column="id"    />
+        <result property="recordTime"    column="record_time"    />
+        <result property="dutyOfficer"    column="duty_officer"    />
+        <result property="rainfall"    column="rainfall"    />
+        <result property="alarmLevel"    column="alarm_level"    />
+        <result property="inspectionTimeStart"    column="inspection_time_start"    />
+        <result property="inspectionTimeEnd"    column="inspection_time_end"    />
+        <result property="inspectionLot"    column="inspection_lot"    />
+        <result property="inspectionType"    column="inspection_type"    />
+        <result property="inspectorsVehicles"    column="inspectors_vehicles"    />
+        <result property="inspectionHiddenDangers"    column="inspection_hidden_dangers"    />
+        <result property="disposalMeasures"    column="disposal_measures"    />
+        <result property="createUser"    column="create_user"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTourSituationVo">
+        select id, record_time, duty_officer, rainfall, alarm_level, inspection_time_start, inspection_time_end, inspection_lot, inspection_type, inspectors_vehicles, inspection_hidden_dangers, disposal_measures, create_user, create_time, update_time from t_tour_situation
+    </sql>
+
+    <select id="selectTourSituationList" parameterType="com.ruoyi.weather.sysmanagement.tour.domain.TourSituation" resultMap="TourSituationResult">
+        <include refid="selectTourSituationVo"/>
+        <where>  
+            <if test="dutyOfficer != null  and dutyOfficer != ''"> and duty_officer = #{dutyOfficer}</if>
+            <if test="rainfall != null  and rainfall != ''"> and rainfall = #{rainfall}</if>
+            <if test="alarmLevel != null  and alarmLevel != ''"> and alarm_level = #{alarmLevel}</if>
+            <if test="inspectionTimeStart != null "> and inspection_time_start = #{inspectionTimeStart}</if>
+            <if test="inspectionTimeEnd != null "> and inspection_time_end = #{inspectionTimeEnd}</if>
+            <if test="inspectionLot != null  and inspectionLot != ''"> and inspection_lot = #{inspectionLot}</if>
+            <if test="inspectionType != null  and inspectionType != ''"> and inspection_type = #{inspectionType}</if>
+            <if test="inspectorsVehicles != null "> and inspectors_vehicles = #{inspectorsVehicles}</if>
+            <if test="inspectionHiddenDangers != null  and inspectionHiddenDangers != ''"> and inspection_hidden_dangers = #{inspectionHiddenDangers}</if>
+            <if test="disposalMeasures != null  and disposalMeasures != ''"> and disposal_measures = #{disposalMeasures}</if>
+
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(record_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(record_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectTourSituationById" parameterType="Long" resultMap="TourSituationResult">
+        <include refid="selectTourSituationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTourSituation" parameterType="com.ruoyi.weather.sysmanagement.tour.domain.TourSituation" useGeneratedKeys="true" keyProperty="id">
+        insert into t_tour_situation
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordTime != null">record_time,</if>
+            <if test="dutyOfficer != null">duty_officer,</if>
+            <if test="rainfall != null">rainfall,</if>
+            <if test="alarmLevel != null">alarm_level,</if>
+            <if test="inspectionTimeStart != null">inspection_time_start,</if>
+            <if test="inspectionTimeEnd != null">inspection_time_end,</if>
+            <if test="inspectionLot != null">inspection_lot,</if>
+            <if test="inspectionType != null">inspection_type,</if>
+            <if test="inspectorsVehicles != null">inspectors_vehicles,</if>
+            <if test="inspectionHiddenDangers != null">inspection_hidden_dangers,</if>
+            <if test="disposalMeasures != null">disposal_measures,</if>
+            <if test="createUser != null and createUser != ''">create_user,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordTime != null">#{recordTime},</if>
+            <if test="dutyOfficer != null">#{dutyOfficer},</if>
+            <if test="rainfall != null">#{rainfall},</if>
+            <if test="alarmLevel != null">#{alarmLevel},</if>
+            <if test="inspectionTimeStart != null">#{inspectionTimeStart},</if>
+            <if test="inspectionTimeEnd != null">#{inspectionTimeEnd},</if>
+            <if test="inspectionLot != null">#{inspectionLot},</if>
+            <if test="inspectionType != null">#{inspectionType},</if>
+            <if test="inspectorsVehicles != null">#{inspectorsVehicles},</if>
+            <if test="inspectionHiddenDangers != null">#{inspectionHiddenDangers},</if>
+            <if test="disposalMeasures != null">#{disposalMeasures},</if>
+            <if test="createUser != null and createUser != ''">#{createUser},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTourSituation" parameterType="com.ruoyi.weather.sysmanagement.tour.domain.TourSituation">
+        update t_tour_situation
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="recordTime != null">record_time = #{recordTime},</if>
+            <if test="dutyOfficer != null">duty_officer = #{dutyOfficer},</if>
+            <if test="rainfall != null">rainfall = #{rainfall},</if>
+            <if test="alarmLevel != null">alarm_level = #{alarmLevel},</if>
+            <if test="inspectionTimeStart != null">inspection_time_start = #{inspectionTimeStart},</if>
+            <if test="inspectionTimeEnd != null">inspection_time_end = #{inspectionTimeEnd},</if>
+            <if test="inspectionLot != null">inspection_lot = #{inspectionLot},</if>
+            <if test="inspectionType != null">inspection_type = #{inspectionType},</if>
+            <if test="inspectorsVehicles != null">inspectors_vehicles = #{inspectorsVehicles},</if>
+            <if test="inspectionHiddenDangers != null">inspection_hidden_dangers = #{inspectionHiddenDangers},</if>
+            <if test="disposalMeasures != null">disposal_measures = #{disposalMeasures},</if>
+            <if test="createUser != null and createUser != ''">create_user = #{createUser},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTourSituationById" parameterType="Long">
+        delete from t_tour_situation where id = #{id}
+    </delete>
+
+    <delete id="deleteTourSituationByIds" parameterType="String">
+        delete from t_tour_situation where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+
+        and a
+    </delete>
+</mapper>

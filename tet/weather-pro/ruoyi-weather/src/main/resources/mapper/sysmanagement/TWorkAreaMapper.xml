@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.weather.sysmanagement.workarea.mapper.TWorkAreaMapper">
+    
+    <resultMap type="com.ruoyi.weather.sysmanagement.workarea.domain.TWorkArea" id="TWorkAreaResult">
+        <result property="id"    column="id"    />
+        <result property="workAreaName"    column="work_area_name"    />
+        <result property="startingPoint"    column="starting_point"    />
+        <result property="terminus"    column="terminus"    />
+        <result property="centre"    column="centre"    />
+        <result property="line"    column="line"    />
+        <result property="centreLongitude"    column="centre_longitude"    />
+        <result property="centreLatitude"    column="centre_latitude"    />
+    </resultMap>
+
+    <resultMap id="WorkAreaToStationResult" type="com.ruoyi.weather.sysmanagement.workarea.domain.TWorkArea">
+        <result property="id"    column="id"    />
+        <result property="workAreaName"    column="work_area_name"    />
+        <result property="startingPoint"    column="starting_point"    />
+        <result property="terminus"    column="terminus"    />
+        <result property="centre"    column="centre"    />
+        <result property="line"    column="line"    />
+        <result property="centreLongitude"    column="centre_longitude"    />
+        <result property="centreLatitude"    column="centre_latitude"    />
+        <collection property="tRainfallStations" ofType="com.ruoyi.weather.sysmanagement.station.domain.TRainfallStation">
+            <result property="id" column="id"/>
+            <result property="workAreaId" column="work_area_id"/>
+            <result property="installationSite" column="installation_site"/>
+            <result property="responsibilityInterval" column="responsibility_interval"/>
+            <result property="responsibilityWorkArea" column="responsibility_work_area" />
+            <result property="latitude" column="latitude"/>
+            <result property="longitude" column="longitude" />
+        </collection>
+    </resultMap>
+
+    <sql id="selectTWorkAreaVo">
+        select id, work_area_name, starting_point, terminus, centre, line,centre_longitude,centre_latitude from t_work_area
+    </sql>
+
+    <sql id="selectTWorkAreaToStationVo">
+        select w.id, w.work_area_name, w.starting_point, w.terminus, w.centre, line
+        ,w.centre_longitude,w.centre_latitude, r.id, r.work_area_id,r.installation_site,r.responsibility_interval,r.responsibility_work_area,
+        r.latitude ,r.longitude
+        from t_work_area w, t_rainfall_station r
+    </sql>
+
+    <select id="selectTWorkAreaList" parameterType="TWorkArea" resultMap="TWorkAreaResult">
+        <include refid="selectTWorkAreaVo"/>
+        <where>  
+            <if test="workAreaName != null  and workAreaName != ''"> and work_area_name like concat('%', #{workAreaName}, '%')</if>
+            <if test="startingPoint != null  and startingPoint != ''"> and starting_point = #{startingPoint}</if>
+            <if test="terminus != null  and terminus != ''"> and terminus = #{terminus}</if>
+            <if test="centre != null  and centre != ''"> and centre = #{centre}</if>
+            <if test="line != null  and line != ''"> and line = #{line}</if>
+            <if test="centreLongitude != null and centreLongitude != ''">and centre_longitude = #{centreLongitude}</if>
+            <if test="centreLatitude != null and centreLatitude != ''">and centre_latitude = #{centreLatitude}</if>
+        </where>
+    </select>
+    
+    <select id="selectTWorkAreaById" parameterType="Long" resultMap="WorkAreaToStationResult">
+        <include refid="selectTWorkAreaToStationVo"/>
+        where w.id = #{id} and w.id = r.work_area_id
+    </select>
+        
+    <insert id="insertTWorkArea" parameterType="TWorkArea" useGeneratedKeys="true" keyProperty="id">
+        insert into t_work_area
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workAreaName != null and workAreaName != ''">work_area_name,</if>
+            <if test="startingPoint != null">starting_point,</if>
+            <if test="terminus != null">terminus,</if>
+            <if test="centre != null and centre != ''">centre,</if>
+            <if test="line != null and line != ''">line,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workAreaName != null and workAreaName != ''">#{workAreaName},</if>
+            <if test="startingPoint != null">#{startingPoint},</if>
+            <if test="terminus != null">#{terminus},</if>
+            <if test="centre != null and centre != ''">#{centre},</if>
+            <if test="line != null and line != ''">#{line},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTWorkArea" parameterType="TWorkArea">
+        update t_work_area
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workAreaName != null and workAreaName != ''">work_area_name = #{workAreaName},</if>
+            <if test="startingPoint != null">starting_point = #{startingPoint},</if>
+            <if test="terminus != null">terminus = #{terminus},</if>
+            <if test="centre != null and centre != ''">centre = #{centre},</if>
+            <if test="line != null and line != ''">line = #{line},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTWorkAreaById" parameterType="Long">
+        delete from t_work_area where id = #{id}
+    </delete>
+
+    <delete id="deleteTWorkAreaByIds" parameterType="String">
+        delete from t_work_area where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

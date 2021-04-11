@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.weather.sysmanagement.station.mapper.TRainfallStationMapper">
+    
+    <resultMap type="TRainfallStation" id="TRainfallStationResult">
+        <result property="id"    column="id"    />
+        <result property="workAreaId"    column="work_area_id"    />
+        <result property="installationSite"    column="installation_site"    />
+        <result property="responsibilityInterval"    column="responsibility_interval"    />
+        <result property="responsibilityWorkArea"    column="responsibility_work_area"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
+    </resultMap>
+
+    <resultMap id="TRainfallStationAndWorkArea" type="com.ruoyi.weather.sysmanagement.station.body.RainfallStationAndWorkAreaBody">
+        <result property="id" column="id"/>
+        <result property="workAreaId" column="work_area_id"/>
+        <result property="installationSite" column="installation_site"/>
+        <result property="responsibilityInterval" column="responsibility_interval"/>
+        <result property="responsibilityWorkArea" column="responsibility_work_area"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <result property="workAreaName" column="work_area_name"/>
+        <result property="line" column="type"/>
+    </resultMap>
+
+    <sql id="selectTRainfallStationVo">
+        select id, work_area_id, installation_site, responsibility_interval, responsibility_work_area, longitude, latitude from t_rainfall_station
+    </sql>
+
+    <sql id="selectTRainfallStationAndWorkAreaVo">
+        SELECT
+            CASE
+                w.line
+                WHEN 1 THEN
+                    'dz'
+                WHEN 2 THEN
+                    'zc'
+                WHEN 3 THEN
+                    'xz'
+                ELSE 'qx'
+                END AS type,
+            s.id,
+            s.work_area_id,
+            s.installation_site,
+            s.responsibility_interval,
+            s.responsibility_work_area,
+            s.latitude,
+            s.longitude,
+            w.work_area_name
+        FROM
+            t_rainfall_station s,
+            t_work_area w
+    </sql>
+
+    <select id="selectTRainfallStationList" parameterType="TRainfallStation" resultMap="TRainfallStationResult">
+        <include refid="selectTRainfallStationVo"/>
+        <where>  
+            <if test="workAreaId != null "> and work_area_id = #{workAreaId}</if>
+            <if test="installationSite != null  and installationSite != ''"> and installation_site = #{installationSite}</if>
+            <if test="responsibilityInterval != null  and responsibilityInterval != ''"> and responsibility_interval = #{responsibilityInterval}</if>
+            <if test="responsibilityWorkArea != null  and responsibilityWorkArea != ''"> and responsibility_work_area = #{responsibilityWorkArea}</if>
+            <if test="longitude != null  and longitude != ''"> and longitude = #{longitude}</if>
+            <if test="latitude != null  and latitude != ''"> and latitude = #{latitude}</if>
+        </where>
+    </select>
+
+    <select id="selectTRainfallStationAndWorkAreaList" resultMap="TRainfallStationAndWorkArea">
+        <include refid="selectTRainfallStationAndWorkAreaVo" />
+        <where>
+            s.work_area_id = w.id
+        </where>
+    </select>
+    
+    <select id="selectTRainfallStationById" parameterType="Long" resultMap="TRainfallStationResult">
+        <include refid="selectTRainfallStationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTRainfallStation" parameterType="TRainfallStation" useGeneratedKeys="true" keyProperty="id">
+        insert into t_rainfall_station
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="workAreaId != null">work_area_id,</if>
+            <if test="installationSite != null">installation_site,</if>
+            <if test="responsibilityInterval != null">responsibility_interval,</if>
+            <if test="responsibilityWorkArea != null">responsibility_work_area,</if>
+            <if test="longitude != null and longitude != ''">longitude,</if>
+            <if test="latitude != null and latitude != ''">latitude,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="workAreaId != null">#{workAreaId},</if>
+            <if test="installationSite != null">#{installationSite},</if>
+            <if test="responsibilityInterval != null">#{responsibilityInterval},</if>
+            <if test="responsibilityWorkArea != null">#{responsibilityWorkArea},</if>
+            <if test="longitude != null and longitude != ''">#{longitude},</if>
+            <if test="latitude != null and latitude != ''">#{latitude},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTRainfallStation" parameterType="TRainfallStation">
+        update t_rainfall_station
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workAreaId != null">work_area_id = #{workAreaId},</if>
+            <if test="installationSite != null">installation_site = #{installationSite},</if>
+            <if test="responsibilityInterval != null">responsibility_interval = #{responsibilityInterval},</if>
+            <if test="responsibilityWorkArea != null">responsibility_work_area = #{responsibilityWorkArea},</if>
+            <if test="longitude != null and longitude != ''">longitude = #{longitude},</if>
+            <if test="latitude != null and latitude != ''">latitude = #{latitude},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTRainfallStationById" parameterType="Long">
+        delete from t_rainfall_station where id = #{id}
+    </delete>
+
+    <delete id="deleteTRainfallStationByIds" parameterType="String">
+        delete from t_rainfall_station where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

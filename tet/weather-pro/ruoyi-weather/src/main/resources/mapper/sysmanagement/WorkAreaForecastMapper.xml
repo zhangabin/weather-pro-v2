@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.weather.sysmanagement.workareaforecast.mapper.WorkAreaForecastMapper">
+    
+    <resultMap type="WorkAreaForecast" id="WorkAreaForecastResult">
+        <result property="id"    column="work_area_id"    />
+        <result property="start_date_time"    column="start_date_time"    />
+        <result property="date_time"    column="date_time"    />
+        <result property="temperature"    column="temperature"    />
+        <result property="sum_precipitation"    column="sum_precipitation"    />
+        <result property="wind_v"    column="wind_v"    />
+        <result property="wind_d"    column="wind_d"    />
+        <result property="relative_humidity"    column="relative_humidity"    />
+        <result property="pressure"    column="pressure"    />
+        <result property="hour_precipitation"    column="hour_precipitation"    />
+    </resultMap>
+
+    <sql id="selectWorkAreaForecastVo">
+        select work_area_id, start_date_time, date_time, temperature, sum_precipitation, wind_v, wind_d, relative_humidity, pressure, hour_precipitation from t_work_area_forecast
+    </sql>
+
+    <select id="selectWorkAreaForecastList" parameterType="WorkAreaForecast" resultMap="WorkAreaForecastResult">
+        <include refid="selectWorkAreaForecastVo"/>
+        <where>  
+            <if test="id != null "> and work_area_id = #{id}</if>
+            <if test="start_date_time != null "> and start_date_time = #{start_date_time}</if>
+            <if test="date_time != null "> and date_time = #{date_time}</if>
+            <if test="temperature != null "> and temperature = #{temperature}</if>
+            <if test="sum_precipitation != null "> and sum_precipitation = #{sum_precipitation}</if>
+            <if test="wind_v != null "> and wind_v = #{wind_v}</if>
+            <if test="wind_d != null "> and wind_d = #{wind_d}</if>
+            <if test="relative_humidity != null "> and relative_humidity = #{relative_humidity}</if>
+            <if test="pressure != null "> and pressure = #{pressure}</if>
+            <if test="hour_precipitation != null "> and hour_precipitation = #{hour_precipitation}</if>
+        </where>
+    </select>
+    
+    <select id="selectWorkAreaForecastById" parameterType="WorkAreaForecast" resultMap="WorkAreaForecastResult">
+        <include refid="selectWorkAreaForecastVo"/>
+        where work_area_id = #{id} and date_time &gt;= #{startTime} and date_time &lt;= #{endTime}
+    </select>
+        
+    <insert id="insertWorkAreaForecast" parameterType="WorkAreaForecast">
+        insert into t_work_area_forecast
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">work_area_id,</if>
+            <if test="start_date_time != null">start_date_time,</if>
+            <if test="date_time != null">date_time,</if>
+            <if test="temperature != null">temperature,</if>
+            <if test="sum_precipitation != null">sum_precipitation,</if>
+            <if test="wind_v != null">wind_v,</if>
+            <if test="wind_d != null">wind_d,</if>
+            <if test="relative_humidity != null">relative_humidity,</if>
+            <if test="pressure != null">pressure,</if>
+            <if test="hour_precipitation != null">hour_precipitation,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="start_date_time != null">#{start_date_time},</if>
+            <if test="date_time != null">#{date_time},</if>
+            <if test="temperature != null">#{temperature},</if>
+            <if test="sum_precipitation != null">#{sum_precipitation},</if>
+            <if test="wind_v != null">#{wind_v},</if>
+            <if test="wind_d != null">#{wind_d},</if>
+            <if test="relative_humidity != null">#{relative_humidity},</if>
+            <if test="pressure != null">#{pressure},</if>
+            <if test="hour_precipitation != null">#{hour_precipitation},</if>
+         </trim>
+    </insert>
+    
+    <!-- 批量插入 -->
+    <insert id="insertWorkAreaForecastList"  parameterType="java.util.List">
+    	insert into t_work_area_forecast(
+	    	work_area_id,
+			start_date_time,
+			date_time,
+			temperature,
+			sum_precipitation,
+			wind_v,
+			wind_d,
+			relative_humidity,
+			pressure,
+			hour_precipitation
+    	)values
+    	<foreach collection="workAreaForecastList" item="workAreaForecastListOne" separator="," >
+            (
+	            #{workAreaForecastListOne.id},
+	            #{workAreaForecastListOne.start_date_time},
+	            #{workAreaForecastListOne.date_time},
+	            #{workAreaForecastListOne.temperature},
+	            #{workAreaForecastListOne.sum_precipitation},
+	            #{workAreaForecastListOne.wind_v},
+	            #{workAreaForecastListOne.wind_d},
+	            #{workAreaForecastListOne.relative_humidity},
+	            #{workAreaForecastListOne.pressure},
+	            #{workAreaForecastListOne.hour_precipitation}
+            )
+        </foreach>
+         ON DUPLICATE KEY UPDATE
+            start_date_time =  VALUES(start_date_time),
+            temperature = VALUES(temperature),
+			sum_precipitation = VALUES(sum_precipitation),
+			wind_v =  VALUES(wind_v),
+			wind_d =  VALUES(wind_d),
+			relative_humidity = VALUES(relative_humidity),
+			pressure = VALUES(pressure),
+			hour_precipitation = VALUES(hour_precipitation)
+    </insert>
+
+    <update id="updateWorkAreaForecast" parameterType="WorkAreaForecast">
+        update t_work_area_forecast
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="start_date_time != null">start_date_time = #{start_date_time},</if>
+            <if test="date_time != null">date_time = #{date_time},</if>
+            <if test="temperature != null">temperature = #{temperature},</if>
+            <if test="sum_precipitation != null">sum_precipitation = #{sum_precipitation},</if>
+            <if test="wind_v != null">wind_v = #{wind_v},</if>
+            <if test="wind_d != null">wind_d = #{wind_d},</if>
+            <if test="relative_humidity != null">relative_humidity = #{relative_humidity},</if>
+            <if test="pressure != null">pressure = #{pressure},</if>
+            <if test="hour_precipitation != null">hour_precipitation = #{hour_precipitation},</if>
+        </trim>
+        where work_area_id = #{id}
+    </update>
+
+    <delete id="deleteWorkAreaForecastById" parameterType="Long">
+        delete from t_work_area_forecast where work_area_id = #{id}
+    </delete>
+
+    <delete id="deleteWorkAreaForecastByIds" parameterType="String">
+        delete from t_work_area_forecast where work_area_id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 根据到达时间删除数据，这个服务于车总预报数据入库的定时任务，清除数据 -->
+    <delete id="deleteWorkAreaForecastByStartTimes">
+		 delete from t_work_area_forecast where start_date_time &lt;= #{start_date_time}
+    </delete>
+    
+    <!-- 根据线路和选择的预报日期查询数据,服务于车站预报的H5端 -->
+    <select id="getForecastByLineAndForecastDate" parameterType="WorkAreaForecast" resultMap="WorkAreaForecastResult">
+    	select line,workName,date_time,wind_d,wind_v,sum_precipitation,temperature from v_work_area_forecast
+   	    where  line = #{line} and date_time &gt;= #{startTime} and date_time &lt;= #{endTime}
+    </select>
+</mapper>

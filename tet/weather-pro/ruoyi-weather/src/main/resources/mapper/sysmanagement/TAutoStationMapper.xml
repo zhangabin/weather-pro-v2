@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.weather.sysmanagement.auto.station.mapper.TAutoStationMapper">
+  <resultMap id="BaseResultMap" type="com.ruoyi.weather.sysmanagement.auto.station.domain.TAutoStation">
+    <!--@mbg.generated-->
+    <!--@Table t_auto_station-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="station_name" jdbcType="VARCHAR" property="stationName" />
+    <result column="station_code" jdbcType="VARCHAR" property="stationCode" />
+    <result column="province" jdbcType="VARCHAR" property="province" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="cnty" jdbcType="VARCHAR" property="cnty" />
+    <result column="town" jdbcType="VARCHAR" property="town" />
+    <result column="admin_code_chn" jdbcType="VARCHAR" property="adminCodeChn" />
+    <result column="town_code" jdbcType="VARCHAR" property="townCode" />
+    <result column="lon" jdbcType="VARCHAR" property="lon" />
+    <result column="lat" jdbcType="VARCHAR" property="lat" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, station_name, station_code, province, city, cnty, town, admin_code_chn, town_code, 
+    lon, lat
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from t_auto_station
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from t_auto_station
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.ruoyi.weather.sysmanagement.auto.station.domain.TAutoStation" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_auto_station (station_name, station_code, province, 
+      city, cnty, town, admin_code_chn, 
+      town_code, lon, lat)
+    values (#{stationName,jdbcType=VARCHAR}, #{stationCode,jdbcType=VARCHAR}, #{province,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{cnty,jdbcType=VARCHAR}, #{town,jdbcType=VARCHAR}, #{adminCodeChn,jdbcType=VARCHAR}, 
+      #{townCode,jdbcType=VARCHAR}, #{lon,jdbcType=VARCHAR}, #{lat,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.ruoyi.weather.sysmanagement.auto.station.domain.TAutoStation" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into t_auto_station
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stationName != null and stationName != ''">
+        station_name,
+      </if>
+      <if test="stationCode != null and stationCode != ''">
+        station_code,
+      </if>
+      <if test="province != null and province != ''">
+        province,
+      </if>
+      <if test="city != null and city != ''">
+        city,
+      </if>
+      <if test="cnty != null and cnty != ''">
+        cnty,
+      </if>
+      <if test="town != null and town != ''">
+        town,
+      </if>
+      <if test="adminCodeChn != null and adminCodeChn != ''">
+        admin_code_chn,
+      </if>
+      <if test="townCode != null and townCode != ''">
+        town_code,
+      </if>
+      <if test="lon != null and lon != ''">
+        lon,
+      </if>
+      <if test="lat != null and lat != ''">
+        lat,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stationName != null and stationName != ''">
+        #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="stationCode != null and stationCode != ''">
+        #{stationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null and province != ''">
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null and city != ''">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cnty != null and cnty != ''">
+        #{cnty,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null and town != ''">
+        #{town,jdbcType=VARCHAR},
+      </if>
+      <if test="adminCodeChn != null and adminCodeChn != ''">
+        #{adminCodeChn,jdbcType=VARCHAR},
+      </if>
+      <if test="townCode != null and townCode != ''">
+        #{townCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lon != null and lon != ''">
+        #{lon,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null and lat != ''">
+        #{lat,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ruoyi.weather.sysmanagement.auto.station.domain.TAutoStation">
+    <!--@mbg.generated-->
+    update t_auto_station
+    <set>
+      <if test="stationName != null and stationName != ''">
+        station_name = #{stationName,jdbcType=VARCHAR},
+      </if>
+      <if test="stationCode != null and stationCode != ''">
+        station_code = #{stationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null and province != ''">
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null and city != ''">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="cnty != null and cnty != ''">
+        cnty = #{cnty,jdbcType=VARCHAR},
+      </if>
+      <if test="town != null and town != ''">
+        town = #{town,jdbcType=VARCHAR},
+      </if>
+      <if test="adminCodeChn != null and adminCodeChn != ''">
+        admin_code_chn = #{adminCodeChn,jdbcType=VARCHAR},
+      </if>
+      <if test="townCode != null and townCode != ''">
+        town_code = #{townCode,jdbcType=VARCHAR},
+      </if>
+      <if test="lon != null and lon != ''">
+        lon = #{lon,jdbcType=VARCHAR},
+      </if>
+      <if test="lat != null and lat != ''">
+        lat = #{lat,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+
+  <insert id="save" parameterType="list">
+    insert into t_auto_station
+   (station_name,
+    station_code,
+    province,
+    city,
+    cnty,
+    town,
+    admin_code_chn,
+    town_code,
+    lon,
+    lat)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.stationName},
+      #{item.stationCode},
+      #{item.province},
+      #{item.city},
+      #{item.cnty},
+      #{item.town},
+      #{item.adminCodeChn},
+      #{item.townCode},
+      #{item.lon},
+      #{item.lat})
+    </foreach>
+    ON DUPLICATE KEY UPDATE
+    station_name = values(station_name),
+    station_code =  values(station_code),
+    province =  values(province),
+    city =  values(city),
+    cnty =  values(cnty),
+    town =  values(town),
+    admin_code_chn =  values(admin_code_chn),
+    town_code =  values(town_code),
+    lon =  values(lon),
+    lat =  values(lon)
+  </insert>
+</mapper>

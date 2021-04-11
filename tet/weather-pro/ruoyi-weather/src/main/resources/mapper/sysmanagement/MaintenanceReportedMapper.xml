@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.weather.sysmanagement.reported.mapper.MaintenanceReportedMapper">
+    
+    <resultMap type="com.ruoyi.weather.sysmanagement.reported.domain.MaintenanceReported" id="MaintenanceReportedResult">
+        <result property="id"    column="id"    />
+        <result property="alarmType"    column="alarm_type"    />
+        <result property="reportedTime"    column="reported_time"    />
+        <result property="reportedUser"    column="reported_user"    />
+        <result property="alarmContent"    column="alarm_content"    />
+        <result property="errorDescription"    column="error_description"    />
+        <result property="remark"    column="remark"    />
+        <result property="state"    column="state"    />
+        <result property="operatingRecord"    column="operating_record"    />
+    </resultMap>
+
+    <sql id="selectMaintenanceReportedVo">
+        select id, alarm_type, reported_time, reported_user, alarm_content, error_description, remark, state, operating_record from t_maintenance_reported
+    </sql>
+
+    <select id="selectMaintenanceReportedList" parameterType="com.ruoyi.weather.sysmanagement.reported.domain.MaintenanceReported" resultMap="MaintenanceReportedResult">
+        <include refid="selectMaintenanceReportedVo"/>
+        <where>  
+            <if test="alarmType != null "> and alarm_type = #{alarmType}</if>
+            <if test="reportedUser != null  and reportedUser != ''"> and reported_user = #{reportedUser}</if>
+            <if test="alarmContent != null  and alarmContent != ''"> and alarm_content = #{alarmContent}</if>
+            <if test="errorDescription != null  and errorDescription != ''"> and error_description = #{errorDescription}</if>
+            <if test="state != null  and state != ''"> and state = #{state}</if>
+            <if test="operatingRecord != null  and operatingRecord != ''"> and operating_record = #{operatingRecord}</if>
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(reported_time,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(reported_time,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+            </if>
+        </where>
+    </select>
+    
+    <select id="selectMaintenanceReportedById" parameterType="Long" resultMap="MaintenanceReportedResult">
+        <include refid="selectMaintenanceReportedVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMaintenanceReported" parameterType="com.ruoyi.weather.sysmanagement.reported.domain.MaintenanceReported">
+        insert into t_maintenance_reported
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="alarmType != null">alarm_type,</if>
+            <if test="reportedTime != null">reported_time,</if>
+            <if test="reportedUser != null and reportedUser != ''">reported_user,</if>
+            <if test="alarmContent != null and alarmContent != ''">alarm_content,</if>
+            <if test="errorDescription != null and errorDescription != ''">error_description,</if>
+            <if test="remark != null">remark,</if>
+            <if test="state != null and state != ''">state,</if>
+            <if test="operatingRecord != null">operating_record,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="alarmType != null">#{alarmType},</if>
+            <if test="reportedTime != null">#{reportedTime},</if>
+            <if test="reportedUser != null and reportedUser != ''">#{reportedUser},</if>
+            <if test="alarmContent != null and alarmContent != ''">#{alarmContent},</if>
+            <if test="errorDescription != null and errorDescription != ''">#{errorDescription},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="state != null and state != ''">#{state},</if>
+            <if test="operatingRecord != null">#{operatingRecord},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMaintenanceReported" parameterType="com.ruoyi.weather.sysmanagement.reported.domain.MaintenanceReported">
+        update t_maintenance_reported
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="alarmType != null">alarm_type = #{alarmType},</if>
+            <if test="reportedTime != null">reported_time = #{reportedTime},</if>
+            <if test="reportedUser != null and reportedUser != ''">reported_user = #{reportedUser},</if>
+            <if test="alarmContent != null and alarmContent != ''">alarm_content = #{alarmContent},</if>
+            <if test="errorDescription != null and errorDescription != ''">error_description = #{errorDescription},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="state != null and state != ''">state = #{state},</if>
+            <if test="operatingRecord != null">operating_record = #{operatingRecord},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMaintenanceReportedById" parameterType="Long">
+        delete from t_maintenance_reported where id = #{id}
+    </delete>
+
+    <delete id="deleteMaintenanceReportedByIds" parameterType="String">
+        delete from t_maintenance_reported where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
